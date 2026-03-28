@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marco Ferretti — Architetto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:  #f5f2ec;
+      --ink:    #1c1c1a;
+      --muted:  #7a7670;
+      --accent: #3d3a35;
+      --line:   rgba(28,28,26,.13);
+      --serif:  'Cormorant Garamond', Georgia, serif;
+      --sans:   'Montserrat', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 14px;
+      letter-spacing: .04em;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 60px;
+      background: rgba(245,242,236,.9);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 300;
+      letter-spacing: .12em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      transition: color .25s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 88px;
+    }
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px 80px 60px;
+    }
+    .hero-tag {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(52px, 5.5vw, 80px);
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -.01em;
+      margin-bottom: 36px;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--muted);
+    }
+    .hero-desc {
+      max-width: 360px;
+      color: var(--muted);
+      margin-bottom: 52px;
+      line-height: 1.9;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 36px;
+      border: 1px solid var(--ink);
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background .25s, color .25s;
+      align-self: flex-start;
+    }
+    .btn:hover { background: var(--ink); color: var(--cream); }
+
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%) contrast(1.04);
+      transition: transform 8s ease;
+    }
+    .hero-image:hover img { transform: scale(1.03); }
+    .hero-caption {
+      position: absolute;
+      bottom: 32px; right: 32px;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.7);
+    }
+
+    /* ── SECTION BASE ── */
+    section { padding: 120px 60px; }
+    .section-tag {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(36px, 3.5vw, 52px);
+      font-weight: 300;
+      line-height: 1.15;
+      margin-bottom: 48px;
+    }
+    hr.divider {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 0 60px;
+    }
+
+    /* ── CHI SONO ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .about-image { position: relative; }
+    .about-image img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      filter: grayscale(15%);
+    }
+    .about-year {
+      position: absolute;
+      bottom: -16px; right: -20px;
+      font-family: var(--serif);
+      font-size: 80px;
+      color: var(--line);
+      font-weight: 300;
+      line-height: 1;
+      user-select: none;
+    }
+    .about-body { padding-top: 20px; }
+    .about-body p { color: var(--muted); max-width: 440px; margin-bottom: 20px; }
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid var(--line);
+    }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 42px;
+      font-weight: 300;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── PORTFOLIO ── */
+    #portfolio { padding: 120px 0; }
+    #portfolio .inner { padding: 0 60px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+    }
+    .project {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .project img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      filter: grayscale(25%);
+      transition: transform .7s ease, filter .4s;
+    }
+    .project:hover img { transform: scale(1.06); filter: grayscale(0%); }
+    .project-info {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(28,28,26,.8) 0%, transparent 55%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    .project:hover .project-info { opacity: 1; }
+    .project-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .project-type {
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.6);
+      margin-top: 6px;
+    }
+    /* featured project — spans 2 columns */
+    .project.featured { grid-column: span 2; }
+    .project.featured img { aspect-ratio: 16/9; }
+
+    /* ── SERVIZI ── */
+    #services {
+      background: var(--ink);
+      color: var(--cream);
+    }
+    #services .section-tag { color: rgba(245,242,236,.4); }
+    #services .section-title { color: var(--cream); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(245,242,236,.12);
+      margin-top: 60px;
+    }
+    .service {
+      padding: 48px 40px 48px 0;
+      border-right: 1px solid rgba(245,242,236,.12);
+    }
+    .service:last-child { border-right: none; padding-left: 40px; }
+    .service:nth-child(2) { padding-left: 40px; }
+    .service-num {
+      font-family: var(--serif);
+      font-size: 11px;
+      letter-spacing: .14em;
+      color: rgba(245,242,236,.3);
+      margin-bottom: 28px;
+    }
+    .service-title {
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 300;
+      margin-bottom: 18px;
+      line-height: 1.2;
+    }
+    .service p { font-size: 13px; color: rgba(245,242,236,.55); line-height: 1.85; }
+
+    /* ── CONTATTI ── */
+    #contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-left p { color: var(--muted); max-width: 380px; margin-bottom: 48px; }
+    .contact-item { margin-bottom: 28px; }
+    .contact-label {
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .contact-value {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--ink);
+    }
+    .contact-value a { color: inherit; text-decoration: none; border-bottom: 1px solid var(--line); transition: border-color .2s; }
+    .contact-value a:hover { border-color: var(--ink); }
+    form { display: flex; flex-direction: column; gap: 24px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+    .form-group input,
+    .form-group textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .25s;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--ink); }
+    .form-group textarea { min-height: 100px; }
+    form .btn { align-self: flex-start; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 60px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p { font-size: 11px; color: var(--muted); letter-spacing: .06em; }
+
+    /* ── FADE IN ── */
+    .fade { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .fade.visible { opacity: 1; transform: none; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { gap: 20px; }
+      section { padding: 80px 24px; }
+      hr.divider { margin: 0 24px; }
+      #home { grid-template-columns: 1fr; min-height: auto; }
+      .hero-text { padding: 100px 24px 60px; }
+      .hero-image { height: 60vw; }
+      #about { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+      .about-year { font-size: 50px; }
+      .grid { grid-template-columns: 1fr; }
+      .project.featured { grid-column: span 1; }
+      .project.featured img { aspect-ratio: 3/4; }
+      #portfolio .inner { padding: 0 24px; }
+      #portfolio { padding: 80px 0; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service { border-right: none; border-bottom: 1px solid rgba(245,242,236,.12); padding: 40px 0 !important; }
+      #services { padding: 80px 24px; }
+      #contact { grid-template-columns: 1fr; gap: 48px; padding: 80px 24px; }
+      footer { padding: 28px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">Marco Ferretti</a>
+  <ul class="nav-links">
+    <li><a href="#about">Chi sono</a></li>
+    <li><a href="#portfolio">Progetti</a></li>
+    <li><a href="#services">Servizi</a></li>
+    <li><a href="#contact">Contatti</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-text">
+    <p class="hero-tag">Architettura — Milano</p>
+    <h1 class="hero-title">Spazi che<br>raccontano<br><em>storie.</em></h1>
+    <p class="hero-desc">Progettiamo ambienti residenziali e commerciali dove forma, luce e materia dialogano in equilibrio perfetto.</p>
+    <a href="#portfolio" class="btn">Esplora i progetti</a>
+  </div>
+  <div class="hero-image">
+    <img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1000&q=80" alt="Progetto architettonico"/>
+    <span class="hero-caption">Casa R — 2024</span>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- CHI SONO -->
+<section id="about" class="fade">
+  <div class="about-image">
+    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" alt="Studio"/>
+    <span class="about-year">98</span>
+  </div>
+  <div class="about-body">
+    <p class="section-tag">Chi sono</p>
+    <h2 class="section-title">Un approccio<br>artigianale al<br>progetto.</h2>
+    <p>Fondato nel 1998, lo studio Marco Ferretti Architetti ha sviluppato nel corso degli anni un metodo progettuale rigoroso ma sensibile, capace di tradurre le esigenze del committente in architetture autentiche.</p>
+    <p>Ogni progetto nasce da un ascolto profondo del luogo, della luce e delle persone che lo abiteranno. La qualità costruttiva e la cura del dettaglio sono valori fondamentali del nostro lavoro.</p>
+    <div class="stats">
+      <div>
+        <div class="stat-num">140+</div>
+        <div class="stat-label">Progetti realizzati</div>
+      </div>
+      <div>
+        <div class="stat-num">26</div>
+        <div class="stat-label">Anni di attività</div>
+      </div>
+      <div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">Premi nazionali</div>
+      </div>
+      <div>
+        <div class="stat-num">12</div>
+        <div class="stat-label">Paesi di intervento</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="inner fade">
+    <p class="section-tag">Portfolio</p>
+    <h2 class="section-title">Progetti selezionati.</h2>
+  </div>
+  <div class="grid fade">
+    <div class="project featured">
+      <img src="https://images.unsplash.com/photo-1493397212122-2b85dda8106b?w=1200&q=80" alt="Casa B"/>
+      <div class="project-info">
+        <div class="project-name">Casa B — Lago di Como</div>
+        <div class="project-type">Residenziale · 2024</div>
+      </div>
+    </div>
+    <div class="project">
+      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="Villa M"/>
+      <div class="project-info">
+        <div class="project-name">Villa M</div>
+        <div class="project-type">Residenziale · 2023</div>
+      </div>
+    </div>
+    <div class="project">
+      <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80" alt="Showroom T"/>
+      <div class="project-info">
+        <div class="project-name">Showroom T</div>
+        <div class="project-type">Commerciale · 2023</div>
+      </div>
+    </div>
+    <div class="project">
+      <img src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=600&q=80" alt="Loft K"/>
+      <div class="project-info">
+        <div class="project-name">Loft K — Milano</div>
+        <div class="project-type">Residenziale · 2022</div>
+      </div>
+    </div>
+    <div class="project featured">
+      <img src="https://images.unsplash.com/photo-1602941525421-8f8b81d3edbb?w=1200&q=80" alt="Hotel V"/>
+      <div class="project-info">
+        <div class="project-name">Hotel V — Firenze</div>
+        <div class="project-type">Ospitalità · 2022</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<!-- SERVIZI -->
+<section id="services">
+  <p class="section-tag">Servizi</p>
+  <h2 class="section-title">Cosa facciamo.</h2>
+  <div class="services-grid fade">
+    <div class="service">
+      <div class="service-num">01</div>
+      <div class="service-title">Architettura residenziale</div>
+      <p>Progettazione di ville, appartamenti e complessi residenziali. Dal concept al cantiere, con attenzione al comfort abitativo e all'efficienza energetica.</p>
+    </div>
+    <div class="service">
+      <div class="service-num">02</div>
+      <div class="service-title">Architettura commerciale</div>
+      <p>Uffici, negozi, hotel e spazi pubblici progettati per valorizzare l'identità del brand e ottimizzare l'esperienza degli utenti.</p>
+    </div>
+    <div class="service">
+      <div class="service-num">03</div>
+      <div class="service-title">Interior design</div>
+      <p>Progettazione degli interni con selezione di materiali, arredi e illuminazione. Un percorso completo dalla visione alla realizzazione.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATTI -->
+<section id="contact" class="fade">
+  <div class="contact-left">
+    <p class="section-tag">Contatti</p>
+    <h2 class="section-title">Parliamo del<br>tuo progetto.</h2>
+    <p>Ogni incarico inizia con una conversazione. Raccontaci la tua idea e costruiamo insieme lo spazio che immagini.</p>
+    <div class="contact-item">
+      <div class="contact-label">Studio</div>
+      <div class="contact-value">Via della Spiga 12, Milano</div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label">Email</div>
+      <div class="contact-value"><a href="mailto:info@marcoferretti.it">info@marcoferretti.it</a></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label">Telefono</div>
+      <div class="contact-value"><a href="tel:+390212345678">+39 02 1234 5678</a></div>
+    </div>
+  </div>
+  <form onsubmit="handleForm(event)">
+    <div class="form-group">
+      <label>Nome</label>
+      <input type="text" placeholder="Il tuo nome" required/>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" placeholder="La tua email" required/>
+    </div>
+    <div class="form-group">
+      <label>Messaggio</label>
+      <textarea placeholder="Descrivi brevemente il tuo progetto…" required></textarea>
+    </div>
+    <button type="submit" class="btn">Invia messaggio</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 Marco Ferretti Architetti — P.IVA 01234567890</p>
+  <p>Milano · Roma · Ginevra</p>
+</footer>
+
+<script>
+  /* Fade-in observer */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+
+  /* Form */
+  function handleForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = 'Messaggio inviato ✓';
+    btn.style.background = '#1c1c1a';
+    btn.style.color = '#f5f2ec';
+    btn.style.cursor = 'default';
+    e.target.reset();
+    setTimeout(() => { btn.textContent = 'Invia messaggio'; btn.style = ''; }, 3500);
+  }
+</script>
+</body>
+</html>
