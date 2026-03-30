@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Siepi Architetti</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:    #ffffff;
+      --ink:   #0f0f0e;
+      --muted: #8a8680;
+      --line:  #e6e3de;
+      --serif: 'EB Garamond', Georgia, serif;
+      --sans:  'Montserrat', Helvetica, Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: .04em;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 52px;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    /*
+    ╔══════════════════════════════════════════════╗
+    ║  LOGO — ISTRUZIONI                           ║
+    ║                                              ║
+    ║  Attualmente il sito mostra il nome testuale ║
+    ║  "Siepi Architetti".                         ║
+    ║                                              ║
+    ║  Per sostituirlo con il tuo logo:            ║
+    ║  1. Carica il file logo (logo.svg o logo.png)║
+    ║     nel repository GitHub                    ║
+    ║  2. Trova il commento LOGO QUI sotto         ║
+    ║  3. Sostituisci la riga:                     ║
+    ║       <span class="brand-text">              ║
+    ║         Siepi Architetti                     ║
+    ║       </span>                                ║
+    ║     con:                                     ║
+    ║       <img src="logo.svg"                    ║
+    ║            alt="Siepi Architetti"            ║
+    ║            class="brand-img"/>               ║
+    ╚══════════════════════════════════════════════╝
+    */
+    .nav-brand { display: flex; align-items: center; height: 40px; }
+    .brand-text {
+      font-size: 11px; font-weight: 400;
+      letter-spacing: .26em; text-transform: uppercase;
+      color: var(--ink);
+    }
+    .brand-img {
+      height: 30px; width: auto; display: block;
+    }
+
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-link {
+      font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); transition: color .2s;
+    }
+    .nav-link:hover { color: var(--ink); }
+    .nav-ig { display: flex; align-items: center; }
+
+    /* ══════════════════════════════
+       1. HERO — immagine di impatto
+    ══════════════════════════════ */
+    #hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      padding-top: 60px;
+    }
+    #hero img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 40%;
+      filter: brightness(.82);
+    }
+    .hero-over {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 60px 52px;
+      background: linear-gradient(to top,
+        rgba(15,15,14,.65) 0%,
+        rgba(15,15,14,.15) 45%,
+        transparent 100%);
+    }
+    .hero-eyebrow {
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.55); margin-bottom: 20px;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(48px, 6vw, 90px);
+      font-weight: 400; line-height: 1.04;
+      color: #fff; max-width: 14ch;
+    }
+    .hero-title em { font-style: italic; }
+    .hero-scroll {
+      position: absolute; bottom: 36px; right: 52px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+    }
+    .hero-scroll-line {
+      width: 40px; height: 1px; background: rgba(255,255,255,.35);
+    }
+
+    /* ══════════════════════════════
+       2. FASCIA NUMERI
+    ══════════════════════════════ */
+    #stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+    .stat-cell {
+      padding: 44px 40px;
+      border-right: 1px solid var(--line);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 56px; font-weight: 400;
+      line-height: 1; margin-bottom: 10px;
+      color: var(--ink);
+    }
+    .stat-lbl {
+      font-size: 10px; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ══════════════════════════════
+       3. FASCIA CATEGORIE / SERVIZI
+    ══════════════════════════════ */
+    #servizi {
+      padding: 80px 52px;
+      border-bottom: 1px solid var(--line);
+    }
+    .serv-top {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 0;
+    }
+    .sec-label {
+      font-size: 10px; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .serv-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .serv-item {
+      padding: 40px 32px 40px 0;
+      border-right: 1px solid var(--line);
+    }
+    .serv-item:last-child { border-right: none; padding-right: 0; }
+    .serv-item:not(:first-child) { padding-left: 32px; }
+    .serv-num {
+      font-family: var(--serif); font-style: italic;
+      font-size: 13px; color: var(--muted);
+      margin-bottom: 20px; display: block;
+    }
+    .serv-title {
+      font-family: var(--serif);
+      font-size: 22px; line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .serv-desc {
+      font-size: 12px; color: var(--muted); line-height: 1.9;
+    }
+
+    /* ══════════════════════════════
+       4. GRIGLIA IMMAGINI MISTE
+         Layout: 3 col × righe alternate
+         Riga A: [ grande ] [ piccola ]
+         Riga B: [ piccola ] [ grande ]
+         Più una cella fullwidth di separazione testuale
+    ══════════════════════════════ */
+    #progetti { padding-top: 80px; }
+    .proj-head {
+      display: flex; justify-content: space-between;
+      padding: 0 52px 32px;
+    }
+
+    .proj-mixed {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-auto-rows: auto;
+      gap: 3px;
+    }
+
+    /* Celle standard */
+    .pm-cell {
+      position: relative; overflow: hidden;
+      background: #f0ede8; cursor: pointer;
+    }
+    .pm-cell img {
+      width: 100%; height: 100%; display: block;
+      object-fit: cover;
+      transition: transform .9s cubic-bezier(.22,.1,.22,1), filter .45s;
+      filter: grayscale(6%) brightness(.96);
+    }
+    .pm-cell:hover img { transform: scale(1.06); filter: grayscale(0%) brightness(1); }
+
+    /* Altezze */
+    .pm-tall  { height: 68vh; }
+    .pm-med   { height: 50vh; }
+    .pm-short { height: 38vh; }
+
+    /* Spans */
+    .pm-span2 { grid-column: span 2; }
+    .pm-span3 { grid-column: span 3; }
+
+    /* Cella testo (citazione) */
+    .pm-text {
+      background: var(--ink);
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 56px 52px;
+    }
+    .pm-text blockquote {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.8vw, 36px);
+      font-style: italic; color: #fff;
+      line-height: 1.45; max-width: 26ch;
+      margin-bottom: 24px;
+    }
+    .pm-text cite {
+      font-size: 10px; letter-spacing: .18em;
+      text-transform: uppercase; color: rgba(255,255,255,.4);
+      font-style: normal;
+    }
+
+    /* Overlay info progetto */
+    .pm-over {
+      position: absolute; inset: 0;
+      background: rgba(15,15,14,0);
+      display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 24px;
+      transition: background .38s;
+    }
+    .pm-cell:hover .pm-over { background: rgba(15,15,14,.46); }
+    .pm-name {
+      font-family: var(--serif); font-size: 20px; font-style: italic;
+      color: #fff;
+      opacity: 0; transform: translateY(9px);
+      transition: opacity .3s, transform .3s;
+    }
+    .pm-meta {
+      font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(255,255,255,.65); margin-top: 5px;
+      opacity: 0; transform: translateY(9px);
+      transition: opacity .3s .06s, transform .3s .06s;
+    }
+    .pm-cell:hover .pm-name,
+    .pm-cell:hover .pm-meta { opacity: 1; transform: none; }
+
+    /* ══════════════════════════════
+       5. STUDIO
+    ══════════════════════════════ */
+    #studio {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 3px solid var(--ink);
+      margin-top: 3px;
+    }
+    .studio-img {
+      position: relative; overflow: hidden;
+      min-height: 600px;
+    }
+    .studio-img img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      filter: grayscale(8%);
+      transition: transform 9s ease;
+    }
+    .studio-img:hover img { transform: scale(1.03); }
+    .studio-body {
+      padding: 80px 56px;
+      border-left: 1px solid var(--line);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .studio-body .sec-label { margin-bottom: 28px; }
+    .studio-body h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 46px);
+      line-height: 1.2; margin-bottom: 28px;
+    }
+    .studio-body p {
+      color: var(--muted); line-height: 1.95;
+      max-width: 400px; margin-bottom: 14px;
+      font-size: 13px;
+    }
+
+    /* ══════════════════════════════
+       6. CONTATTI
+    ══════════════════════════════ */
+    #contatti {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--line);
+    }
+    .cont-left {
+      padding: 88px 52px;
+      border-right: 1px solid var(--line);
+    }
+    .cont-left .sec-label { margin-bottom: 28px; }
+    .cont-left h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 2.8vw, 44px);
+      line-height: 1.2; margin-bottom: 52px;
+    }
+    .c-info { margin-bottom: 28px; }
+    .c-lbl {
+      font-size: 10px; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+    }
+    .c-val { font-family: var(--serif); font-size: 18px; }
+    .c-val a { border-bottom: 1px solid var(--line); transition: border-color .2s; }
+    .c-val a:hover { border-color: var(--ink); }
+
+    .cont-right { padding: 88px 52px; }
+    form { display: flex; flex-direction: column; }
+    .fg { margin-bottom: 30px; }
+    .fg label {
+      display: block; font-size: 10px; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+    }
+    .fg input, .fg textarea {
+      width: 100%; background: transparent; border: none;
+      border-bottom: 1px solid var(--line); padding: 10px 0;
+      font-family: var(--sans); font-size: 14px; font-weight: 300;
+      color: var(--ink); outline: none; resize: none;
+      transition: border-color .25s;
+    }
+    .fg textarea { min-height: 88px; }
+    .fg input:focus, .fg textarea:focus { border-color: var(--ink); }
+    .send-btn {
+      background: var(--ink); color: #fff;
+      padding: 15px 40px; border: none; cursor: pointer;
+      font-family: var(--sans); font-size: 10px; font-weight: 400;
+      letter-spacing: .2em; text-transform: uppercase;
+      align-self: flex-start; transition: background .2s;
+    }
+    .send-btn:hover { background: #2e2e2c; }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      padding: 22px 52px;
+      border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { font-size: 10px; color: var(--muted); letter-spacing: .08em; }
+
+    /* ══════════════════════════════
+       REVEAL
+    ══════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(18px);
+      transition: opacity .75s ease, transform .75s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { gap: 18px; }
+      .hero-over { padding: 40px 20px 48px; }
+      .hero-scroll { right: 20px; }
+      #stats { grid-template-columns: 1fr 1fr; }
+      .stat-cell:nth-child(2) { border-right: none; }
+      .stat-cell:nth-child(3) { border-top: 1px solid var(--line); }
+      .stat-cell:nth-child(4) { border-right: none; border-top: 1px solid var(--line); }
+      #servizi { padding: 60px 20px; }
+      .serv-grid { grid-template-columns: 1fr 1fr; }
+      .serv-item:nth-child(2) { border-right: none; }
+      .serv-item:nth-child(3) { border-top: 1px solid var(--line); padding-top: 32px; }
+      .serv-item:nth-child(4) { border-right: none; border-top: 1px solid var(--line); padding-top: 32px; }
+      #progetti { padding-top: 52px; }
+      .proj-head { padding: 0 20px 24px; }
+      .proj-mixed { grid-template-columns: 1fr 1fr; }
+      .pm-span2 { grid-column: span 2; }
+      .pm-span3 { grid-column: span 2; }
+      .pm-tall  { height: 52vw; }
+      .pm-med   { height: 44vw; }
+      .pm-short { height: 44vw; }
+      .pm-text  { padding: 40px 20px; }
+      #studio { grid-template-columns: 1fr; }
+      .studio-img { min-height: 65vw; }
+      .studio-body { padding: 52px 20px; border-left: none; border-top: 1px solid var(--line); }
+      #contatti { grid-template-columns: 1fr; }
+      .cont-left { padding: 60px 20px; border-right: none; border-bottom: 1px solid var(--line); }
+      .cont-right { padding: 52px 20px; }
+      footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════ -->
+<nav>
+  <a href="#" class="nav-brand">
+    <!-- LOGO: sostituisci lo <span> con <img src="logo.svg" class="brand-img" alt="Siepi Architetti"/> -->
+    <span class="brand-text">Siepi Architetti</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#progetti" class="nav-link">Progetti</a></li>
+    <li><a href="#studio"   class="nav-link">Studio</a></li>
+    <li><a href="#servizi"  class="nav-link">Servizi</a></li>
+    <li><a href="#contatti" class="nav-link">Contatti</a></li>
+    <li><a href="https://www.instagram.com/siepiarchitetti" target="_blank" rel="noopener" class="nav-link nav-ig" aria-label="Instagram">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:block">
+        <rect x="2" y="2" width="20" height="20" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a></li>
+  </ul>
+</nav>
+
+<!-- ══ 1. HERO ══════════════════════════════════ -->
+<section id="hero">
+  <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=90" alt="Progetto principale"/>
+  <div class="hero-over">
+    <p class="hero-eyebrow">Perugia — dal 1998</p>
+    <h1 class="hero-title">Spazio.<br><em>Luce.<br>Materia.</em></h1>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scorri
+  </div>
+</section>
+
+<!-- ══ 2. NUMERI ════════════════════════════════ -->
+<div id="stats" class="reveal">
+  <div class="stat-cell">
+    <div class="stat-num">140+</div>
+    <div class="stat-lbl">Progetti realizzati</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num">26</div>
+    <div class="stat-lbl">Anni di attività</div>
+  </div>
+
+</div>
+
+<!-- ══ 3. SERVIZI ═══════════════════════════════ -->
+<section id="servizi" class="reveal">
+  <div class="serv-top">
+    <span class="sec-label">Cosa facciamo</span>
+    <span class="sec-label">Studio Siepi — Perugia</span>
+  </div>
+  <div class="serv-grid">
+    <div class="serv-item">
+      <span class="serv-num">01</span>
+      <div class="serv-title">Architettura<br>residenziale</div>
+      <p class="serv-desc">Ville, case unifamiliari e appartamenti di pregio. Dal concept alla direzione lavori.</p>
+    </div>
+    <div class="serv-item">
+      <span class="serv-num">02</span>
+      <div class="serv-title">Architettura<br>commerciale</div>
+      <p class="serv-desc">Showroom, uffici, hotel e spazi pubblici progettati per valorizzare il brand.</p>
+    </div>
+    <div class="serv-item">
+      <span class="serv-num">03</span>
+      <div class="serv-title">Interior<br>design</div>
+      <p class="serv-desc">Materiali, arredi e luce selezionati con cura. Dalla visione alla realizzazione.</p>
+    </div>
+    <div class="serv-item">
+      <span class="serv-num">04</span>
+      <div class="serv-title">Restauro e<br>ristrutturazione</div>
+      <p class="serv-desc">Recupero di edifici storici con rispetto per il luogo e la memoria costruttiva.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 4. PROGETTI — griglia mista ══════════════ -->
+<section id="progetti">
+  <div class="proj-head reveal">
+    <span class="sec-label">Progetti selezionati</span>
+    <span class="sec-label">2019 – 2024</span>
+  </div>
+
+  <div class="proj-mixed">
+
+    <!-- Riga 1: grande a sinistra (span2) + piccola a destra -->
+    <div class="pm-cell pm-span2 pm-tall">
+      <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&q=85" alt="Casa B"/>
+      <div class="pm-over">
+        <div class="pm-name">Casa B</div>
+        <div class="pm-meta">Residenziale — Como, 2024</div>
+      </div>
+    </div>
+    <div class="pm-cell pm-tall">
+      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=85" alt="Villa M"/>
+      <div class="pm-over">
+        <div class="pm-name">Villa M</div>
+        <div class="pm-meta">Residenziale — Firenze, 2023</div>
+      </div>
+    </div>
+
+    <!-- Cella testo di rottura -->
+    <div class="pm-text pm-span3 pm-short">
+      <blockquote>Ogni spazio nasce dall'ascolto del luogo e di chi lo abiterà.</blockquote>
+      <cite>— Siepi Architetti, Perugia</cite>
+    </div>
+
+    <!-- Riga 2: piccola a sinistra + grande a destra (span2) -->
+    <div class="pm-cell pm-med">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=85" alt="Showroom T"/>
+      <div class="pm-over">
+        <div class="pm-name">Showroom T</div>
+        <div class="pm-meta">Commerciale — Milano, 2023</div>
+      </div>
+    </div>
+    <div class="pm-cell pm-span2 pm-med">
+      <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=85" alt="Villa R"/>
+      <div class="pm-over">
+        <div class="pm-name">Villa R</div>
+        <div class="pm-meta">Residenziale — Lago di Garda, 2023</div>
+      </div>
+    </div>
+
+    <!-- Riga 3: tre celle uguali -->
+    <div class="pm-cell pm-med">
+      <img src="https://images.unsplash.com/photo-1574359411659-15573a27fd0c?w=700&q=85" alt="Loft K"/>
+      <div class="pm-over">
+        <div class="pm-name">Loft K</div>
+        <div class="pm-meta">Interior — Milano, 2022</div>
+      </div>
+    </div>
+    <div class="pm-cell pm-med">
+      <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=700&q=85" alt="Casa F"/>
+      <div class="pm-over">
+        <div class="pm-name">Casa F</div>
+        <div class="pm-meta">Residenziale — Venezia, 2022</div>
+      </div>
+    </div>
+    <div class="pm-cell pm-med">
+      <img src="https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=700&q=85" alt="Palazzo G"/>
+      <div class="pm-over">
+        <div class="pm-name">Palazzo G</div>
+        <div class="pm-meta">Restauro — Perugia, 2021</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ 5. STUDIO ════════════════════════════════ -->
+<section id="studio">
+  <div class="studio-img">
+    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1000&q=85" alt="Lo studio"/>
+  </div>
+  <div class="studio-body reveal">
+    <p class="sec-label">Lo studio</p>
+    <h2>Un metodo<br>artigianale.</h2>
+    <p>Fondato nel 1998 a Perugia, lo studio ha sviluppato un approccio progettuale che mette al centro la qualità dello spazio vissuto.</p>
+    <p>Ogni intervento nasce da un dialogo profondo con il committente e con il luogo. La semplicità dei volumi, la cura del dettaglio e la scelta attenta dei materiali sono i tratti distintivi del nostro lavoro.</p>
+  </div>
+</section>
+
+<!-- ══ 6. CONTATTI ══════════════════════════════ -->
+<section id="contatti">
+  <div class="cont-left reveal">
+    <p class="sec-label">Contatti</p>
+    <h2>Parliamo del<br>tuo progetto.</h2>
+    <div class="c-info">
+      <div class="c-lbl">Studio</div>
+      <div class="c-val">Perugia</div>
+    </div>
+    <div class="c-info">
+      <div class="c-lbl">Email</div>
+      <div class="c-val"><a href="mailto:info@siepiarchitetti.it">info@siepiarchitetti.it</a></div>
+    </div>
+    <div class="c-info">
+      <div class="c-lbl">Telefono</div>
+      <div class="c-val"><a href="tel:+390750000000">+39 075 000 0000</a></div>
+    </div>
+  </div>
+  <div class="cont-right reveal">
+    <form onsubmit="handleForm(event)">
+      <div class="fg"><label>Nome</label><input type="text" placeholder="Il tuo nome" required/></div>
+      <div class="fg"><label>Email</label><input type="email" placeholder="La tua email" required/></div>
+      <div class="fg"><label>Messaggio</label><textarea placeholder="Descrivi brevemente il tuo progetto…" required></textarea></div>
+      <button type="submit" class="send-btn">Invia</button>
+    </form>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════ -->
+<footer>
+  <p>© 2024 Siepi Architetti — P.IVA 01234567890</p>
+  <a href="https://www.instagram.com/siepiarchitetti" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--muted)'">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5"/>
+      <circle cx="12" cy="12" r="4"/>
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+    </svg>
+    @siepiarchitetti
+  </a>
+  <p>Perugia · Umbria</p>
+</footer>
+
+<script>
+  /* Reveal on scroll */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  /* Form */
+  function handleForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    const orig = btn.textContent;
+    btn.textContent = 'Inviato ✓';
+    btn.style.background = '#2e2e2c';
+    e.target.reset();
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 3500);
+  }
+</script>
+</body>
+</html>
