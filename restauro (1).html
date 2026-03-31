@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Restauro — Siepi Architetti</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff; --ink: #0f0f0e; --muted: #8a8680;
+      --line: #e6e3de;
+      --serif: 'EB Garamond', Georgia, serif;
+      --sans: 'Montserrat', Helvetica, Arial, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-weight: 300; font-size: 13px; letter-spacing: .04em; }
+    a { color: inherit; text-decoration: none; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 60px; display: flex; justify-content: space-between; align-items: center;
+      padding: 0 52px; background: rgba(255,255,255,.97);
+      backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+    }
+    .nav-brand { display: flex; align-items: center; height: 40px; }
+    .brand-text { font-size: 11px; font-weight: 400; letter-spacing: .26em; text-transform: uppercase; }
+    .brand-img { height: 30px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-link { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .nav-link:hover { color: var(--ink); }
+    .nav-ig { display: flex; align-items: center; }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 96px 52px 44px;
+      border-bottom: 1px solid var(--line);
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .back-link {
+      font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); display: flex; align-items: center; gap: 8px;
+      transition: color .2s; margin-bottom: 24px; display: inline-flex;
+    }
+    .back-link:hover { color: var(--ink); }
+    .page-title { font-family: var(--serif); font-size: clamp(34px, 4vw, 56px); font-weight: 400; line-height: 1.1; }
+    .page-header-right { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); text-align: right; line-height: 2; }
+
+    /* CATEGORIE NAV — ordine: Residenziale · Commerciale · Restauro · Interior */
+    .cat-nav { display: flex; border-bottom: 1px solid var(--line); }
+    .cat-link {
+      padding: 15px 32px; font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--muted); border-right: 1px solid var(--line); transition: color .2s, background .2s;
+    }
+    .cat-link:last-child { border-right: none; }
+    .cat-link:hover { color: var(--ink); background: #f8f6f2; }
+    .cat-link.active { color: var(--ink); font-weight: 400; border-bottom: 2px solid var(--ink); }
+
+    /* PROGETTI WRAP */
+    .progetti-wrap { padding: 72px 52px; }
+
+    .progetto {
+      margin-bottom: 88px; padding-bottom: 88px;
+      border-bottom: 1px solid var(--line);
+    }
+    .progetto:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .progetto-header {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 32px;
+    }
+    .progetto-title { font-family: var(--serif); font-size: clamp(24px, 2.6vw, 38px); font-weight: 400; }
+    .progetto-meta { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); text-align: right; line-height: 1.9; }
+
+    /* GALLERIA — griglia 3 colonne, tutte 4/3, cliccabili */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .gitem {
+      position: relative; overflow: hidden;
+      background: #f0ede8; cursor: pointer;
+      aspect-ratio: 4 / 3;
+    }
+    /* cella doppia larghezza */
+    .gitem.w2 { grid-column: span 2; aspect-ratio: 8/3; }
+
+    .gitem img {
+      width: 100%; height: 100%; display: block; object-fit: cover;
+      transition: transform .75s cubic-bezier(.22,.1,.22,1);
+    }
+    .gitem:hover img { transform: scale(1.04); }
+
+    /* overlay con nome progetto e anno solo all'hover */
+    .gitem-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 14px 16px;
+      background: linear-gradient(to top, rgba(15,15,14,.55), transparent);
+      opacity: 0; transition: opacity .3s;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .gitem:hover .gitem-info { opacity: 1; }
+    .gitem-name { font-family: var(--serif); font-size: 15px; font-style: italic; color: #fff; }
+    .gitem-year { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.65); }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(15,15,14,.96);
+      justify-content: center; align-items: center;
+    }
+    .lightbox.open { display: flex; }
+    .lb-img { max-width: 88vw; max-height: 82vh; object-fit: contain; display: block; }
+    .lb-info {
+      position: absolute; bottom: 32px; left: 0; right: 0;
+      text-align: center;
+      font-family: var(--serif); font-size: 17px; font-style: italic;
+      color: rgba(255,255,255,.7);
+    }
+    .lb-info span { font-family: var(--sans); font-style: normal; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-left: 12px; }
+    .lb-close { position: absolute; top: 24px; right: 32px; font-size: 28px; color: rgba(255,255,255,.45); cursor: pointer; transition: color .2s; line-height: 1; }
+    .lb-close:hover { color: #fff; }
+    .lb-prev, .lb-next { position: absolute; top: 50%; transform: translateY(-50%); font-size: 36px; color: rgba(255,255,255,.35); cursor: pointer; transition: color .2s; user-select: none; padding: 20px; }
+    .lb-prev:hover, .lb-next:hover { color: #fff; }
+    .lb-prev { left: 12px; }
+    .lb-next { right: 12px; }
+
+    /* FOOTER */
+    footer { padding: 22px 52px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-size: 10px; color: var(--muted); }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .75s ease, transform .75s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    @media (max-width: 860px) {
+      nav { padding: 0 20px; }
+      .nav-links { gap: 16px; }
+      .page-header { padding: 86px 20px 36px; flex-direction: column; gap: 14px; }
+      .page-header-right { text-align: left; }
+      .cat-nav { overflow-x: auto; }
+      .cat-link { white-space: nowrap; padding: 13px 20px; }
+      .progetti-wrap { padding: 48px 20px; }
+      .progetto-header { flex-direction: column; gap: 8px; }
+      .progetto-meta { text-align: left; }
+      .gallery { grid-template-columns: 1fr 1fr; }
+      .gitem.w2 { grid-column: span 2; aspect-ratio: 4/3; }
+      footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">
+    <!-- LOGO: sostituisci con <img src="logo.svg" class="brand-img" alt="Siepi Architetti"/> -->
+    <span class="brand-text">Siepi Architetti</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#progetti" class="nav-link">Progetti</a></li>
+    <li><a href="index.html#studio"   class="nav-link">Studio</a></li>
+    <li><a href="index.html#servizi"  class="nav-link">Servizi</a></li>
+    <li><a href="index.html#contatti" class="nav-link">Contatti</a></li>
+    <li><a href="https://www.instagram.com/siepiarchitetti" target="_blank" rel="noopener" class="nav-link nav-ig" aria-label="Instagram">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:block">
+        <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div>
+    <a href="index.html" class="back-link">← Tutti i progetti</a>
+    <h1 class="page-title">Restauro e<br>ristrutturazione</h1>
+  </div>
+  <div class="page-header-right">Siepi Architetti<br>Perugia</div>
+</div>
+
+<nav class="cat-nav">
+  <a href="residenziale.html" class="cat-link">Residenziale</a>
+  <a href="commerciale.html"  class="cat-link">Commerciale</a>
+  <a href="restauro.html"     class="cat-link active">Restauro</a>
+  <a href="interior.html"     class="cat-link">Interior</a>
+</nav>
+
+<div class="progetti-wrap">
+
+  <!-- PROGETTO 1 — Palazzo G -->
+  <div class="progetto reveal">
+    <div class="progetto-header">
+      <h2 class="progetto-title">Palazzo G</h2>
+      <div class="progetto-meta">Restauro · Perugia · 2021</div>
+    </div>
+    <div class="gallery">
+      <div class="gitem w2" onclick="openLb(this,'Palazzo G','2024')">
+        <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1400&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa B</span><span class="gitem-year">2024</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Palazzo G','2024')">
+        <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa B</span><span class="gitem-year">2024</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Palazzo G','2024')">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa B</span><span class="gitem-year">2024</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Palazzo G','2024')">
+        <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa B</span><span class="gitem-year">2024</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Palazzo G','2024')">
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa B</span><span class="gitem-year">2024</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGETTO 2 — Casa S -->
+  <div class="progetto reveal">
+    <div class="progetto-header">
+      <h2 class="progetto-title">Casa S</h2>
+      <div class="progetto-meta">Restauro · Spoleto · 2020</div>
+    </div>
+    <div class="gallery">
+      <div class="gitem w2" onclick="openLb(this,'Casa S','2023')">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Villa M</span><span class="gitem-year">2023</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Casa S','2023')">
+        <img src="https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Villa M</span><span class="gitem-year">2023</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Casa S','2023')">
+        <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Villa M</span><span class="gitem-year">2023</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Casa S','2023')">
+        <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Villa M</span><span class="gitem-year">2023</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGETTO 3 — Casale R -->
+  <div class="progetto reveal">
+    <div class="progetto-header">
+      <h2 class="progetto-title">Casale R</h2>
+      <div class="progetto-meta">Restauro · Assisi · 2019</div>
+    </div>
+    <div class="gallery">
+      <div class="gitem" onclick="openLb(this,'Casale R','2022')">
+        <img src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa F</span><span class="gitem-year">2022</span></div>
+      </div>
+      <div class="gitem w2" onclick="openLb(this,'Casale R','2022')">
+        <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1400&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa F</span><span class="gitem-year">2022</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Casale R','2022')">
+        <img src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa F</span><span class="gitem-year">2022</span></div>
+      </div>
+      <div class="gitem" onclick="openLb(this,'Casale R','2022')">
+        <img src="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=800&q=85" alt=""/>
+        <div class="gitem-info"><span class="gitem-name">Casa F</span><span class="gitem-year">2022</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2024 Siepi Architetti — P.IVA 01234567890</p>
+  <a href="https://www.instagram.com/siepiarchitetti" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    @siepiarchitetti
+  </a>
+  <p>Perugia · Umbria</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lb" onclick="closeLbOut(event)">
+  <span class="lb-close" onclick="closeLb()">×</span>
+  <span class="lb-prev" onclick="lbNav(-1)">‹</span>
+  <img class="lb-img" id="lb-img" src="" alt=""/>
+  <div class="lb-info" id="lb-info"></div>
+  <span class="lb-next" onclick="lbNav(1)">›</span>
+</div>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  let lbItems=[], lbIdx=0;
+
+  function openLb(el, name, year) {
+    const prog = el.closest('.progetto');
+    lbItems = Array.from(prog.querySelectorAll('.gitem'));
+    lbIdx = lbItems.indexOf(el);
+    showLb(name, year);
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showLb(name, year) {
+    const item = lbItems[lbIdx];
+    document.getElementById('lb-img').src = item.querySelector('img').src;
+    const n = item.querySelector('.gitem-name');
+    const y = item.querySelector('.gitem-year');
+    document.getElementById('lb-info').innerHTML = (n ? n.textContent : '') + (y ? '<span>' + y.textContent + '</span>' : '');
+  }
+
+  function closeLb() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeLbOut(e) { if (e.target === document.getElementById('lb')) closeLb(); }
+
+  function lbNav(dir) {
+    lbIdx = (lbIdx + dir + lbItems.length) % lbItems.length;
+    showLb();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lb').classList.contains('open')) return;
+    if (e.key==='ArrowRight') lbNav(1);
+    if (e.key==='ArrowLeft')  lbNav(-1);
+    if (e.key==='Escape')     closeLb();
+  });
+</script>
+</body>
+</html>
